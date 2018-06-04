@@ -1,6 +1,7 @@
 from . models import AccessRequest
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 
 class AccessRequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,6 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             email=validated_data['email']
         )
+        user.groups.add(Group.objects.get(name='clients'))
         user.set_password(validated_data['password'])
         user.save()
         return user

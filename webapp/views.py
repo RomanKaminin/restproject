@@ -10,7 +10,7 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
-
+from .permissions import HasGroupPermission
 
 
 class SendRequest(generics.ListCreateAPIView):
@@ -27,7 +27,10 @@ class AllRequests(APIView):
     Выводит все необработанные заявки.
     """
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [HasGroupPermission]
+    required_groups = {
+        'GET': ['managers'],
+    }
     def get(self, request):
         requests = AccessRequest.objects.filter(access='empty')
         serializer = AccessListManagerSerializer(requests, many=True)
@@ -35,7 +38,12 @@ class AllRequests(APIView):
 
 class AccessDetail(APIView):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [HasGroupPermission]
+    required_groups = {
+        'GET': ['clients'],
+        'PUT': ['managers'],
+        'DELETE': ['managers'],
+    }
 
     def get_object(self, pk):
         try:
@@ -55,7 +63,7 @@ class AccessDetail(APIView):
         """
         Подтверждение или отказ заявки (может только админ).
         """
-        if request.method == 'PUT' and self.request.user.is_superuser:
+        if request.method == 'PUT':
             user = self.get_object(pk)
             serializer = StatusAccessSerializer(user, data=request.data)
             if serializer.is_valid():
@@ -69,7 +77,7 @@ class AccessDetail(APIView):
         """
         Удаление заявки.
         """
-        if request.method == 'DELETE' and self.request.user.is_superuser:
+        if request.method == 'DELETE':
             user = self.get_object(pk)
             user.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
