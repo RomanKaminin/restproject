@@ -1,0 +1,28 @@
+version: '2'
+services:
+  postgres:
+    restart: always
+    image: postgres:10.3-alpine
+    ports:
+    - 6432:5432
+    environment:
+      - "POSTGRES_USER=rest_project"
+      - "POSTGRES_PASSWORD=rest_project"
+      - "PGDATA=/data/postgres"
+
+  django_project:
+    restart: always
+    command: 'bash -c "python3 manage.py migrate && python3 manage.py migrate webapp &&
+          python3 manage.py makemigrations webapp && python3 manage.py loaddata test_data.json &&
+          python3 manage.py runserver 0.0.0.0:8000"'
+    build:
+      dockerfile: "Dockerfile"
+      context: "./django_project"
+    ports:
+    - 8000:8000
+    depends_on:
+    - postgres
+
+
+     
+

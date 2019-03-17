@@ -1,16 +1,20 @@
-from rest_framework.views import APIView
 from .models import AccessRequest
-from .serializers import AccessRequestSerializer, AccessListManagerSerializer,  \
-    StatusAccessSerializer, UserSerializer
+from .permissions import HasGroupPermission
+from .serializers import (
+    AccessRequestSerializer,
+    AccessListManagerSerializer,
+    StatusAccessSerializer,
+    UserSerializer
+)
+from django.http import Http404
+from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.authentication import TokenAuthentication
-from django.http import Http404
 from rest_framework import generics, status
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from django.contrib.auth import get_user_model
-from .permissions import HasGroupPermission
+from rest_framework.views import APIView
 
 
 class SendRequest(generics.ListCreateAPIView):
@@ -22,6 +26,7 @@ class SendRequest(generics.ListCreateAPIView):
     queryset = AccessRequest.objects.all()
     serializer_class = AccessRequestSerializer
 
+
 class AllRequests(APIView):
     """
     Выводит все необработанные заявки.
@@ -31,10 +36,12 @@ class AllRequests(APIView):
     required_groups = {
         'GET': ['managers'],
     }
+
     def get(self, request):
         requests = AccessRequest.objects.filter(access='empty')
         serializer = AccessListManagerSerializer(requests, many=True)
         return Response(serializer.data)
+
 
 class AccessDetail(APIView):
     authentication_classes = (TokenAuthentication,)
@@ -84,9 +91,10 @@ class AccessDetail(APIView):
         else:
             return Response({'detail': "You are have not permission"})
 
+
 class CreateUserView(CreateAPIView):
     """
-    1.Регистрация пользователя с ответом токена.
+    Регистрация пользователя с ответом токена.
     """
     model = get_user_model()
     permission_classes = (AllowAny,)
@@ -100,9 +108,10 @@ class CreateUserView(CreateAPIView):
         token, created = Token.objects.get_or_create(user=serializer.instance)
         return Response({'token': token.key,}, status=status.HTTP_201_CREATED, headers=headers)
 
+
 class AuthView(APIView):
     """
-    1.Проверка аунтификации.
+    Проверка аунтификации.
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)

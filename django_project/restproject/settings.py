@@ -25,7 +25,7 @@ SECRET_KEY = '4@iewnin4u$okz&22-)!5s*wl9x$vq59c9nuzkcoa2o*(x9%3t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -92,19 +92,13 @@ WSGI_APPLICATION = 'restproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'webapp',
-        'USER': 'postgres',
-        'PASSWORD': 'dixtrYPE',
-        'HOST': '127.0.0.1',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'rest_project',
+        'PASSWORD': 'rest_project',
+        'HOST': 'postgres',
         'PORT': '5432',
     }
 }
@@ -146,3 +140,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+FIXTURE_DIRS = (
+   os.path.join(BASE_DIR, 'fixtures'),
+)

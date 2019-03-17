@@ -1,30 +1,18 @@
 
-**REST - service for receiving requests to enter the premises**
+**REST сервис для приема запросов на вход в помещение**
  -
  
   * Пользоатели: посетители и менеджеры. 
   * Посетитель создает заявку, менеджер подтверждает или отказывает.
 
-\
-**For start project**
-
-1) python -m venv myvenv
-2) myvenv\Scripts\activate
-3) pip install -r requirements.pip
-4) create webapp in postgreysql
-5) in django:
-  * python manage.py makemigrations webapp
-  * python manage.py makemigrations 
-  * python manage.py migrate
-  * python manage.py createsuperuser --email admin@example.com --username admin
-  * python manage.py runserver
 
 \
-**How it works**
+**Если не загружать фикстуры из репозитория**
 1) перед регистрацией пользователей в админке приложения необходимо создать 2 группы ('managers' и 'clients') иначе запросы не пройдут
 2) Для того чтобы пользователь мог редактировать или удалять (его через web админку нужно добавить в группу 'managers')
-3) использовать curl
 
+\
+**Как использовать**
 * для регистрации \
 curl -X POST http://127.0.0.1:8000/rest/registration/ --data "username=roman&email=roman@example.com&password=r4r4r4r4"
 получили токен 474dfb85a3f6cd208eb2ca0a43f44b795925a3f9

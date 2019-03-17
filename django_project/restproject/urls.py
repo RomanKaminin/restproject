@@ -16,6 +16,6 @@ urlpatterns = [
     url(r'^rest/access/(?P<pk>[0-9]+)/$', views.AccessDetail.as_view()),
     url(r'^rest/all_requests/', views.AllRequests.as_view()),
     url(r'^rest/auth/', views.AuthView.as_view(), name='auth-view'),
-    url(r'^rest/docs/', schema_view)
+    url(r'^$', schema_view)
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

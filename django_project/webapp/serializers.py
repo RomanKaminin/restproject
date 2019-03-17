@@ -3,6 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 
+
 class AccessRequestSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
@@ -24,6 +25,7 @@ class AccessListManagerSerializer(serializers.ModelSerializer):
         )
         model = AccessRequest
 
+
 class StatusAccessSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
@@ -33,6 +35,7 @@ class StatusAccessSerializer(serializers.ModelSerializer):
             'access',
         )
         model = AccessRequest
+
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
