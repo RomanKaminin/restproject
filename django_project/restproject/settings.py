@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'allauth',
     'allauth.account',
-    'webapp',
+    'app',
     'rest_framework_swagger',
 ]
 SITE_ID = 1
